@@ -1,7 +1,8 @@
 /build
-/pitch_db/test
+/pitch_db
 .vscode/
 __MAC*
 *DS_Store
 *Zone.Identifier
 *bak
+

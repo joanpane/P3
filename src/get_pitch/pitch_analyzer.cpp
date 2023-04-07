@@ -9,11 +9,25 @@ using namespace std;
 /// Name space of UPC
 namespace upc {
   void PitchAnalyzer::autocorrelation(const vector<float> &x, vector<float> &r) const {
-
     for (unsigned int l = 0; l < r.size(); ++l) {
   		/// \TODO Compute the autocorrelation r[l]
-    }
 
+      /**
+      \DONE autocorrelation obtained
+      - autocorrelation set to 0
+      - autocorrelation acumulated for all the signal
+      */
+      r[l] = 0;
+
+      for(unsigned int n=1; n<x.size(); n++){
+        r[l] += x[n]*x[n-1];
+      }
+
+      //Se pot dividir el vector r pel tamany de x, pero ns perq serviria
+      r[l] /= x.size();
+
+    }
+      
     if (r[0] == 0.0F) //to avoid log() and divide zero 
       r[0] = 1e-10; 
   }
@@ -50,6 +64,10 @@ namespace upc {
     /// \TODO Implement a rule to decide whether the sound is voiced or not.
     /// * You can use the standard features (pot, r1norm, rmaxnorm),
     ///   or compute and use other ones.
+
+    if(rmaxnorm>umaxnorm && r1norm>llindarUnvoiced && pot>llindarPot){
+      return false;
+    }
     return true;
   }
 
@@ -75,6 +93,17 @@ namespace upc {
 	///    - The lag corresponding to the maximum value of the pitch.
     ///	   .
 	/// In either case, the lag should not exceed that of the minimum value of the pitch.
+
+  /**
+    \DONE implemented
+  */
+  for(iR=iRMax=r.begin()+npitch_min; iR<r.begin()+npitch_max; iR++){
+    if(*iR>*iRMax){ 
+      iRMax = iR;
+    }
+  }
+
+
 
     unsigned int lag = iRMax - r.begin();
 

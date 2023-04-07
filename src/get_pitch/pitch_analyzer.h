@@ -30,6 +30,10 @@ namespace upc {
       samplingFreq, ///< sampling rate (in samples per second). Has to be set in the constructor call
       npitch_min, ///< minimum value of pitch period, in samples
       npitch_max; ///< maximum value of pitch period, in samples
+    
+    float umaxnorm =0.8;
+    float llindarUnvoiced=0.8;
+    float llindarPot=-50;
  
 	///
 	/// Computes correlation from lag=0 to r.size()
