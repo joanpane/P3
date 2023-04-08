@@ -72,6 +72,8 @@ namespace upc {
   }
 
   float PitchAnalyzer::compute_pitch(vector<float> & x) const {
+    int contador = 0; //Contador per for de mètode compute_pitch. Per representació de 30ms de señal i autocorrelació (!!No crec que se declari aqui!)
+
     if (x.size() != frameLen)
       return -1.0F;
 
@@ -119,7 +121,20 @@ namespace upc {
     
     if (unvoiced(pot, r[1]/r[0], r[lag]/r[0]))
       return 0;
-    else
+    else{
+      if(contador==0){
+        FILE *foutput_x = fopen("resultats_x.txt", "w+");
+        FILE *foutput_r = fopen("resultats_r.txt", "w+");
+        for(unsigned int i=0; i<x.size(); i++){
+          fprintf(foutput_x, "%f\n", x[i]);
+          fprintf(foutput_r, "%f\n", r[i]);
+        }
+        fclose(foutput_x);
+        fclose(foutput_r);
+      }
+      contador++;
       return (float) samplingFreq/(float) lag;
+    }
+      
   }
 }

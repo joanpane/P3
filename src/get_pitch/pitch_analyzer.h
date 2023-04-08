@@ -23,6 +23,7 @@ namespace upc {
 	};
 
     void set_window(Window type); ///< pre-compute window
+    
 
   private:
     std::vector<float> window; ///< precomputed window
@@ -31,9 +32,9 @@ namespace upc {
       npitch_min, ///< minimum value of pitch period, in samples
       npitch_max; ///< maximum value of pitch period, in samples
     
-    float umaxnorm =0.8;
-    float llindarUnvoiced=0.8;
-    float llindarPot=-50;
+    float umaxnorm =0.7;
+    float llindarUnvoiced=0.7;
+    float llindarPot=-40;
  
 	///
 	/// Computes correlation from lag=0 to r.size()
