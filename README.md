@@ -27,8 +27,8 @@ Ejercicios básicos
         if (r[0] == 0.0F) //to avoid log() and divide zero 
          r[0] = 1e-10; 
        }
-    ```
-    Aquesta funció calcula l'autocorrelació. Li passem el vector x de senyal i el vector r que és el que plenem amb l'autocorrelació. 
+      ```
+      Aquesta funció calcula l'autocorrelació. Li passem el vector x de senyal i el vector r que és el que plenem amb l'autocorrelació. 
 
 
    * Inserte una gŕafica donde, en un *subplot*, se vea con claridad la señal temporal de un segmento de
