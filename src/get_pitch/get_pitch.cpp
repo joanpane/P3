@@ -27,6 +27,10 @@ Usage:
 Options:
     -h, --help  Show this screen
     --version   Show the version of the project
+    -w, --window <window-type>  Define windowing to use [default: RECT]
+    -p1, --param1=FLOAT Define parameter 1  [default: 0.7]
+    -p2, --param2=FLOAT Define parameter 2  [default: 0.7]
+    -p3, --param3=FLOAT Define parameter 3  [default: -40.0]
 
 Arguments:
     input-wav   Wave file with the audio signal
@@ -36,6 +40,7 @@ Arguments:
 )";
 
 int main(int argc, const char *argv[]) {
+  
 	/// \TODO 
 	///  Modify the program syntax and the call to **docopt()** in order to
 	///  add options and arguments to the program.
@@ -46,7 +51,18 @@ int main(int argc, const char *argv[]) {
 
 	std::string input_wav = args["<input-wav>"].asString();
 	std::string output_txt = args["<output-txt>"].asString();
+  std::string wintype = args["--window"].asString();
 
+  float param1 = stof(args["--param1"].asString());
+  float param2 = stof(args["--param2"].asString());
+  float param3 = stof(args["--param3"].asString());
+
+  PitchAnalyzer::Window windowt;
+  windowt=PitchAnalyzer::RECT;
+  if(wintype=="RECT") windowt=PitchAnalyzer::RECT;
+  else if(wintype=="HAMMING") windowt=PitchAnalyzer::HAMMING;
+  
+  
   // Read input sound file
   unsigned int rate;
   vector<float> x;
@@ -59,7 +75,7 @@ int main(int argc, const char *argv[]) {
   int n_shift = rate * FRAME_SHIFT;
 
   // Define analyzer
-  PitchAnalyzer analyzer(n_len, rate, PitchAnalyzer::RECT, 50, 500);
+  PitchAnalyzer analyzer(n_len, rate, windowt, 50, 500, param1, param2, param3);
 
   /// \TODO
   /// Preprocess the input signal in order to ease pitch estimation. For instance,

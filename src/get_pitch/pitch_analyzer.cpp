@@ -19,8 +19,8 @@ namespace upc {
       */
       r[l] = 0;
 
-      for(unsigned int n=1; n<x.size(); n++){
-        r[l] += x[n]*x[n-1];
+      for(unsigned int n=0; n<x.size(); n++){ // i n=0?
+        r[l] += x[n]*x[n+l];
       }
 
       //Se pot dividir el vector r pel tamany de x, pero ns perq serviria
@@ -41,6 +41,10 @@ namespace upc {
     switch (win_type) {
     case HAMMING:
       /// \TODO Implement the Hamming window
+      for(unsigned int i=0; i<frameLen; ++i){
+        window[i]=0.53836 - 0.46164*cos(2*M_PI*i/(frameLen-1));
+      }
+
       break;
     case RECT:
     default:
@@ -66,7 +70,7 @@ namespace upc {
     ///   or compute and use other ones.
 
     if(rmaxnorm>umaxnorm && r1norm>llindarUnvoiced && pot>llindarPot){
-      return false;
+      return false;   
     }
     return true;
   }

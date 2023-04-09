@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Put here the program (maybe with path)
-GETF0="get_pitch -w RECT --param1 0.7 --param2 0.7 --param3 -40"
+GETF0="get_pitch -w RECT"
 
 # make release
 
