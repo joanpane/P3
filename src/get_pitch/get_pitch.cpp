@@ -53,14 +53,13 @@ int main(int argc, const char *argv[]) {
 	std::string output_txt = args["<output-txt>"].asString();
   std::string wintype = args["--window"].asString();
 
+
   float param1 = stof(args["--param1"].asString());
   float param2 = stof(args["--param2"].asString());
   float param3 = stof(args["--param3"].asString());
 
   PitchAnalyzer::Window windowt;
-  windowt=PitchAnalyzer::RECT;
-  if(wintype=="RECT") windowt=PitchAnalyzer::RECT;
-  else if(wintype=="HAMMING") windowt=PitchAnalyzer::HAMMING;
+  
   
   
   // Read input sound file
@@ -75,17 +74,26 @@ int main(int argc, const char *argv[]) {
   int n_shift = rate * FRAME_SHIFT;
 
   // Define analyzer
-  PitchAnalyzer analyzer(n_len, rate, windowt, 50, 500, param1, param2, param3);
+  if(wintype=="RECT") {
+    windowt=PitchAnalyzer::RECT;
+  }
+  if(wintype=="HAMMING") {
+    windowt=PitchAnalyzer::HAMMING;
+  }
+
+  PitchAnalyzer analyzer(n_len, rate, PitchAnalyzer::HAMMING, 50, 500, param1, param2, param3);
 
   /// \TODO
   /// Preprocess the input signal in order to ease pitch estimation. For instance,
   /// central-clipping or low pass filtering may be used.
   
   // Iterate for each frame and save values in f0 vector
+  int cont = 0;
   vector<float>::iterator iX;
   vector<float> f0;
   for (iX = x.begin(); iX + n_len < x.end(); iX = iX + n_shift) {
-    float f = analyzer(iX, iX + n_len);
+    float f = analyzer(iX, iX + n_len, cont);
+    cont++;
     f0.push_back(f);
   }
 

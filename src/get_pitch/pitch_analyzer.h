@@ -21,12 +21,14 @@ namespace upc {
 		RECT, 						///< Rectangular window
 		HAMMING						///< Hamming window
 	};
+    
 
     void set_window(Window type); ///< pre-compute window
     
 
   private:
     std::vector<float> window; ///< precomputed window
+    int contador;
     unsigned int frameLen, ///< length of frame (in samples). Has to be set in the constructor call
       samplingFreq, ///< sampling rate (in samples per second). Has to be set in the constructor call
       npitch_min, ///< minimum value of pitch period, in samples
@@ -44,7 +46,7 @@ namespace upc {
 	///
 	/// Returns the pitch (in Hz) of input frame x
 	///
-    float compute_pitch(std::vector<float> & x) const;
+    float compute_pitch(std::vector<float> & x, int cont) const;
 	
 	///
 	/// Returns true is the frame is unvoiced
@@ -80,7 +82,7 @@ namespace upc {
         return -1.0F;
 
       std::vector<float> x(_x); //local copy of input frame
-      return compute_pitch(x);
+      return compute_pitch(x,0);
     }
 
 	///
@@ -93,20 +95,20 @@ namespace upc {
 
       std::vector<float> x(N); //local copy of input frame, size N
       std::copy(pt, pt+N, x.begin()); ///copy input values into local vector x
-      return compute_pitch(x);
+      return compute_pitch(x,0);
     }
 
 	///
     /// Operator (): computes the pitch for the given vector, expressed by the begin and end iterators
 	///
-    float operator()(std::vector<float>::const_iterator begin, std::vector<float>::const_iterator end) const {
+    float operator()(std::vector<float>::const_iterator begin, std::vector<float>::const_iterator end, int cont) const {
 
       if (end-begin != frameLen)
         return -1.0F;
 
       std::vector<float> x(end-begin); //local copy of input frame, size N
       std::copy(begin, end, x.begin()); //copy input values into local vector x
-      return compute_pitch(x);
+      return compute_pitch(x, cont);
     }
     
 	///
