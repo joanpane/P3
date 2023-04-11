@@ -39,14 +39,14 @@ namespace upc {
     window.resize(frameLen);
 
     switch (win_type) {
-    case HAMMING:
+    case PitchAnalyzer::HAMMING:
       /// \TODO Implement the Hamming window
       for(unsigned int i=0; i<frameLen; ++i){
         window[i]=0.53836 - 0.46164*cos(2*M_PI*i/(frameLen-1));
       }
-
       break;
-    case RECT:
+    case PitchAnalyzer::RECT:
+      window.assign(frameLen, 1);
     default:
       window.assign(frameLen, 1);
     }

@@ -27,10 +27,10 @@ Usage:
 Options:
     -h, --help  Show this screen
     --version   Show the version of the project
-    -w, --window <window-type>  Define windowing to use [default: RECT]
-    -p1, --param1=FLOAT Define parameter 1  [default: 0.7]
-    -p2, --param2=FLOAT Define parameter 2  [default: 0.7]
-    -p3, --param3=FLOAT Define parameter 3  [default: -40.0]
+    -w <window-type>, --window=<window-type>  Define windowing to use [default: RECT]
+    -p1 FLOAT, --param1=REAL  Define parameter 1  [default: 0.7]
+    -p2 REAL, --param2=REAL  Define parameter 2  [default: 0.7]
+    -p3 REAL , --param3=REAL  Define parameter 3  [default: -40.0]
 
 Arguments:
     input-wav   Wave file with the audio signal
@@ -59,8 +59,7 @@ int main(int argc, const char *argv[]) {
   float param3 = stof(args["--param3"].asString());
 
   PitchAnalyzer::Window windowt;
-  
-  
+   
   
   // Read input sound file
   unsigned int rate;
@@ -74,11 +73,12 @@ int main(int argc, const char *argv[]) {
   int n_shift = rate * FRAME_SHIFT;
 
   // Define analyzer
-  if(wintype=="RECT") {
-    windowt=PitchAnalyzer::RECT;
-  }
+  
   if(wintype=="HAMMING") {
     windowt=PitchAnalyzer::HAMMING;
+  }
+  else {
+    windowt=PitchAnalyzer::RECT;
   }
 
   PitchAnalyzer analyzer(n_len, rate, PitchAnalyzer::HAMMING, 50, 500, param1, param2, param3);
