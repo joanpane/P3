@@ -17,16 +17,15 @@ Ejercicios básicos
      ```c++
       void PitchAnalyzer::autocorrelation(const vector<float> &x, vector<float> &r) const {
         for (unsigned int l = 0; l < r.size(); ++l) {
-          r[l] = 0;
-          for(unsigned int n = 1; n < x.size(); n++){
-           r[l] += x[n]*x[n-l];
-          }
-        r[l] /= x.size();
+        r[l] = 0;
+
+        for(unsigned int n=0; n<x.size(); n++){ // i n=0?
+           r[l] += x[n]*x[n+l];
         }
 
-        if (r[0] == 0.0F) //to avoid log() and divide zero 
-         r[0] = 1e-10; 
-       }
+       r[l] /= x.size();
+
+      }
       ```
       Aquesta funció calcula l'autocorrelació. Li passem el vector x de senyal i el vector r que és el que plenem amb l'autocorrelació. 
 
