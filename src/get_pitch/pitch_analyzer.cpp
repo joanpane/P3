@@ -20,8 +20,8 @@ namespace upc {
       */
       r[l] = 0;
 
-      for(unsigned int n=0; n<x.size(); n++){ // i n=0?
-        r[l] += x[n]*x[n+l];
+      for(unsigned int n=l; n<x.size(); n++){ // i n=0?
+        r[l] += x[n]*x[n-l];
       }
 
       r[l] /= x.size();
@@ -40,6 +40,7 @@ namespace upc {
 
     switch (win_type) {
     case PitchAnalyzer::HAMMING:
+      
       /// \TODO Implement the Hamming window
       for(unsigned int i=0; i<frameLen; ++i){
         window[i]=0.53836 - 0.46164*cos(2*M_PI*i/(frameLen-1));
@@ -68,7 +69,7 @@ namespace upc {
     /// \TODO Implement a rule to decide whether the sound is voiced or not.
     /// * You can use the standard features (pot, r1norm, rmaxnorm),
     ///   or compute and use other ones.
-
+    
     if(rmaxnorm>umaxnorm && r1norm>llindarUnvoiced && pot>llindarPot){
       return false;   
     }
@@ -77,16 +78,19 @@ namespace upc {
 
   float PitchAnalyzer::compute_pitch(vector<float> & x, int cont) const {
 
-    if (x.size() != frameLen)
+    if (x.size() != frameLen){
       return -1.0F;
+    }
+    
     //Window input frame
     for (unsigned int i=0; i<x.size(); ++i)
       x[i] *= window[i];
 
     vector<float> r(npitch_max);
     autocorrelation(x, r);
+    float iRMax = 2;
 
-    vector<float>::const_iterator iR = r.begin(), iRMax = iR;
+    // vector<float>::const_iterator iR = r.begin(), iRMax = iR;
 
     /// \TODO 
 	  /// Find the lag of the maximum value of the autocorrelation away from the origin.<br>
@@ -95,12 +99,17 @@ namespace upc {
 	  ///    - The lag corresponding to the maximum value of the pitch.
     ///	   .
 	  /// In either case, the lag should not exceed that of the minimum value of the pitch.
-    for(iR=iRMax=r.begin()+npitch_min; iR<r.begin()+npitch_max; iR++){
-      if(*iR>*iRMax){ 
-        iRMax = iR;
+
+
+    for(int i=npitch_min; i<npitch_max; i++){
+      if(r[i]>iRMax){ 
+        iRMax = i;
       }
     }
-    unsigned int lag = iRMax - r.begin();
+
+    unsigned int lag = iRMax;
+
+    //cout << lag;
     /**
       \DONE implemented
     */
@@ -118,12 +127,14 @@ namespace upc {
     if (unvoiced(pot, r[1]/r[0], r[lag]/r[0]))
       return 0;
     else{
-      if(cont==3){
+      if(cont==1){
         FILE *foutput_x = fopen("resultats_x.txt", "w+");
         FILE *foutput_r = fopen("resultats_r.txt", "w+");
         for(unsigned int i=0; i<x.size(); i++){
           fprintf(foutput_x, "%f\n", x[i]);
-          fprintf(foutput_r, "%f\n", r[i]);
+        }
+        for(unsigned int j=0; j<r.size(); j++){
+          fprintf(foutput_r, "%f\n", r[j]);
         }
         fclose(foutput_x);
         fclose(foutput_r);

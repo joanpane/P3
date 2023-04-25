@@ -105,9 +105,9 @@ int main(int argc, const char * argv[])  {
   }   
 
   if (nfiles > 1) {
-    cout << "\n### Summary\n";
+  //  cout << "\n### Summary\n";
     print_results(nTot, vTot, uTot, vuTot, uvTot, vvTot, grossTot, fineTot/nfiles, "TOTAL");
-    cout << "--------------------------\n\n";
+  //  cout << "--------------------------\n\n";
   }
  
   return 0;  
@@ -211,5 +211,6 @@ void print_results(int nframes, int num_voiced, int num_unvoiced,
   score = Fss * (1 - fine_error);
 
   cout << fixed << setprecision(2);
-  cout << "===>\t" << filename << ":\t" << 100 * score << " %\n";
+  //cout << "===>\t" << filename << ":\t" << 100 * score << " %\n";
+  cout << 100 * score;
 }

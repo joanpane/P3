@@ -58,6 +58,8 @@ int main(int argc, const char *argv[]) {
   float param2 = stof(args["--param2"].asString());
   float param3 = stof(args["--param3"].asString());
 
+  // cout << "param1: " << param1 <<" param2: " << param2 << " param3: " <<param3 << " ";
+
   PitchAnalyzer::Window windowt;
    
   
@@ -71,6 +73,7 @@ int main(int argc, const char *argv[]) {
 
   int n_len = rate * FRAME_LEN;
   int n_shift = rate * FRAME_SHIFT;
+
 
   // Define analyzer
   
