@@ -53,9 +53,9 @@ Ejercicios básicos
           }
         }
         unsigned int lag = iRMax;
-    ```
+  ```
 
-    unsigned int lag = iRMax;
+    
    * Implemente la regla de decisión sonoro o sordo e inserte el código correspondiente.
 
    * Puede serle útil seguir las instrucciones contenidas en el documento adjunto `código.pdf`.
