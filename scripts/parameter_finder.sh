@@ -5,11 +5,11 @@ DB=$DIR_P3/pitch_db/train
 CMD="get_pitch "
 BESTSCORE=0
 
-param1=0.7 param2=0 param3=-40
+param1=0.3 param2=0.8 param3=-40
 
 #apt install dc
 
-for param1 in $(seq .5 .005 .7); do 
+#for param1 in $(seq .5 .005 .7); do 
 #for param2 in $(seq 0 .3 1); do
 #for param3 in $(seq 0 .010 0.2); do
     echo -e -n "\rPitchAnalyzer with param1=$param1, param2=$param2, param3=$param3"
@@ -25,5 +25,5 @@ for param1 in $(seq .5 .005 .7); do
         clear
         echo -e "\nNew Best score $BESTSCORE with parameters  param1=$param1, param2=$param2, param3=$param3"
     fi
-     done # done # done 
+    # done  done # done 
 exit 0

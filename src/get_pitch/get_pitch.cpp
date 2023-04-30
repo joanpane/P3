@@ -84,7 +84,7 @@ int main(int argc, const char *argv[]) {
     windowt=PitchAnalyzer::RECT;
   }
 
-  PitchAnalyzer analyzer(n_len, rate, PitchAnalyzer::HAMMING, 50, 500, param1, param2, param3);
+  PitchAnalyzer analyzer(n_len, rate, windowt, 50, 500, param1, param2, param3);
 
   /// \TODO
   /// Preprocess the input signal in order to ease pitch estimation. For instance,
@@ -103,6 +103,13 @@ int main(int argc, const char *argv[]) {
   /// \TODO
   /// Postprocess the estimation in order to supress errors. For instance, a median filter
   /// or time-warping may be used.
+  //for(int k = 1; k<f0.size()-1; k++){
+  //  float midF;
+  //  if((f0[k]<f0[k-1] && f0[k-1]<f0[k+1]) || (f0[k]>f0[k-1] && f0[k-1]>f0[k+1])) midF=f0[k-1];
+  //  else if ((f0[k]<f0[k+1] && f0[k+1]<f0[k-1]) || (f0[k]>f0[k+1] &&f0[k+1]>f0[k-1])) midF=f0[k+1];
+  //  else midF = f0[k];
+  //  f0[k]=midF;
+  //}
 
   // Write f0 contour into the output file
   ofstream os(output_txt);

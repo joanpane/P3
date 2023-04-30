@@ -69,8 +69,11 @@ namespace upc {
     /// \TODO Implement a rule to decide whether the sound is voiced or not.
     /// * You can use the standard features (pot, r1norm, rmaxnorm),
     ///   or compute and use other ones.
-    
-    if(rmaxnorm>umaxnorm && r1norm>llindarUnvoiced && pot>llindarPot){
+    int c=0;
+    if(rmaxnorm>umaxnorm) c++;
+    if(r1norm>llindarUnvoiced) c++;
+    if(pot>llindarPot) c++;
+    if(c>2){
       return false;   
     }
     return true;
@@ -88,7 +91,8 @@ namespace upc {
 
     vector<float> r(npitch_max);
     autocorrelation(x, r);
-    float iRMax = 2;
+    int iRMax = 0;
+    float Rmax = 0;
 
     // vector<float>::const_iterator iR = r.begin(), iRMax = iR;
 
@@ -102,7 +106,8 @@ namespace upc {
 
 
     for(int i=npitch_min; i<npitch_max; i++){
-      if(r[i]>iRMax){ 
+      if(r[i]>Rmax){ 
+        Rmax = r[i];
         iRMax = i;
       }
     }
@@ -127,18 +132,18 @@ namespace upc {
     if (unvoiced(pot, r[1]/r[0], r[lag]/r[0]))
       return 0;
     else{
-      if(cont==1){
-        FILE *foutput_x = fopen("resultats_x.txt", "w+");
-        FILE *foutput_r = fopen("resultats_r.txt", "w+");
-        for(unsigned int i=0; i<x.size(); i++){
-          fprintf(foutput_x, "%f\n", x[i]);
-        }
-        for(unsigned int j=0; j<r.size(); j++){
-          fprintf(foutput_r, "%f\n", r[j]);
-        }
-        fclose(foutput_x);
-        fclose(foutput_r);
-      }
+      //if(cont==1){
+      //  FILE *foutput_x = fopen("resultats_x.txt", "w+");
+      //  FILE *foutput_r = fopen("resultats_r.txt", "w+");
+      //  for(unsigned int i=0; i<x.size(); i++){
+      //    fprintf(foutput_x, "%f\n", x[i]);
+      //  }
+      //  for(unsigned int j=0; j<r.size(); j++){
+      //    fprintf(foutput_r, "%f\n", r[j]);
+      //  }
+      //  fclose(foutput_x);
+      //  fclose(foutput_r);
+      //}
       return (float) samplingFreq/(float) lag;
     }
       
