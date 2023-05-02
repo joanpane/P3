@@ -71,7 +71,6 @@ Ejercicios básicos
       }
       ```
       > Se ha decidido implementar con un contador de condiciones cumplidas para poder jugar con él. En la pràctica, comprobamos que el mejor estimador de voz se da al exigir todas las condiciones.
-   * Puede serle útil seguir las instrucciones contenidas en el documento adjunto `código.pdf`.
 
 - Una vez completados los puntos anteriores, dispondrá de una primera versión del estimador de pitch. El 
   resto del trabajo consiste, básicamente, en obtener las mejores prestaciones posibles con él.

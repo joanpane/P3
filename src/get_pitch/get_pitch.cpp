@@ -111,6 +111,15 @@ int main(int argc, const char *argv[]) {
   //  f0[k]=midF;
   //}
 
+  for(unsigned int l = 1; l < f0.size(); l++){
+    if(f0[l-1] != 0 && f0[l]!=0){
+      if(f0[l]>f0[l-1]*1.8){
+        f0[l] = f0[l-1];
+      }
+    }
+    
+  }
+
   // Write f0 contour into the output file
   ofstream os(output_txt);
   if (!os.good()) {

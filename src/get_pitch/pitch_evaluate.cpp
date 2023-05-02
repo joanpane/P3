@@ -99,15 +99,15 @@ int main(int argc, const char * argv[])  {
     nTot     += f0ref.size();
     nfiles++;
     
-   // print_results(f0ref.size(), num_voiced, num_unvoiced, num_voiced_unvoiced, num_unvoiced_voiced, 
-		//  num_voiced_voiced, num_gross_errors, fine_error, ftest);
+    print_results(f0ref.size(), num_voiced, num_unvoiced, num_voiced_unvoiced, num_unvoiced_voiced, 
+	  num_voiced_voiced, num_gross_errors, fine_error, ftest);
    // cout << "--------------------------\n\n";
   }   
 
-  if (nfiles > 1) {
-  //  cout << "\n### Summary\n";
+  if (nfiles > 0) {
+    cout << "\n### Summary\n";
     print_results(nTot, vTot, uTot, vuTot, uvTot, vvTot, grossTot, fineTot/nfiles, "TOTAL");
-  //  cout << "--------------------------\n\n";
+    cout << "--------------------------\n\n";
   }
  
   return 0;  
@@ -176,7 +176,7 @@ void print_results(int nframes, int num_voiced, int num_unvoiced,
 
   cout << fixed << setprecision(2);
 
-  /*cout << "Num. frames:\t" << nframes 
+  cout << "Num. frames:\t" << nframes 
        << " = " << num_unvoiced << " unvoiced + " 
        << num_voiced << " voiced\n";
 
@@ -189,7 +189,7 @@ void print_results(int nframes, int num_voiced, int num_unvoiced,
   cout << "Gross voiced errors (+" << 100*gross_threshold << " %):\t" << num_gross_errors << "/" << num_voiced_voiced
        << " (" << 100.0F * num_gross_errors/(1.e-12 + num_voiced_voiced) << " %)\n";
   cout << "MSE of fine errors:\t" << 100*fine_error << " %\n";
-*/
+
   VV = num_voiced_voiced;
   VU = num_voiced_unvoiced;
   UV = num_unvoiced_voiced;
@@ -211,6 +211,6 @@ void print_results(int nframes, int num_voiced, int num_unvoiced,
   score = Fss * (1 - fine_error);
 
   cout << fixed << setprecision(2);
-  //cout << "===>\t" << filename << ":\t" << 100 * score << " %\n";
+  cout << "===>\t" << filename << ":\t" << 100 * score << " %\n";
   cout << 100 * score;
 }
