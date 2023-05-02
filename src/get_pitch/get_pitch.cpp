@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string.h>
 #include <errno.h>
+#include <math.h>
 
 #include "wavfile_mono.h"
 #include "pitch_analyzer.h"
@@ -38,6 +39,37 @@ Arguments:
                     - One line per frame with the estimated f0
                     - If considered unvoiced, f0 must be set to f0 = 0
 )";
+
+vector<float> get_data(vector<float> x){
+  vector<float> data(3);
+  vector<float> r(x.size()/2);
+  for (unsigned int l = 0; l < r.size(); ++l) {
+      r[l] = 0;
+
+      for(unsigned int n=l; n<x.size(); n++){ // i n=0?
+        r[l] += x[n]*x[n-l];
+      }
+      r[l] /= x.size();
+  }
+  if (r[0] == 0.0F) //to avoid log() and divide zero 
+    r[0] = 1e-10; 
+  
+  int iRMax = 0;
+  float Rmax = 0;
+
+  for(int i=1; i<r.size(); i++){
+    if(r[i]>Rmax){ 
+      Rmax = r[i];
+      iRMax = i;
+    }
+  }
+
+  data[0]= 10 * log10(r[0]);;
+  data[1]=r[1]/r[0];
+  data[2]=r[iRMax]/r[0];
+
+  return data; 
+}
 
 int main(int argc, const char *argv[]) {
   
@@ -94,10 +126,26 @@ int main(int argc, const char *argv[]) {
   int cont = 0;
   vector<float>::iterator iX;
   vector<float> f0;
+  vector<float> pot;
+  vector<float> r1norm;
+  vector<float> rmaxnorm;
+
+  ofstream os2("prueba.rmaxnorm");
+  if (!os2.good()) {
+    cerr << "Error reading output file " << "data_out.txt" << " (" << strerror(errno) << ")\n";
+    return -3;
+  }
+
   for (iX = x.begin(); iX + n_len < x.end(); iX = iX + n_shift) {
     float f = analyzer(iX, iX + n_len, cont);
     cont++;
     f0.push_back(f);
+
+    //For data:
+    std::vector<float> x2(n_len); //local copy of input frame, size N
+    std::copy(iX, iX + n_len, x2.begin()); //copy input values into local vector x
+    vector<float> data = get_data(x2);
+    os2 << data[2] << '\n';
   }
 
   /// \TODO

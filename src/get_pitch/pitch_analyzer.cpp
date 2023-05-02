@@ -133,8 +133,8 @@ namespace upc {
       return 0;
     else{
       //if(cont==1){
-      //  FILE *foutput_x = fopen("resultats_x.txt", "w+");
-      //  FILE *foutput_r = fopen("resultats_r.txt", "w+");
+      //  FILE *foutput_x = fopen("informe/resultats_x.txt", "w+");
+      //  FILE *foutput_r = fopen("informe/resultats_r.txt", "w+");
       //  for(unsigned int i=0; i<x.size(); i++){
       //    fprintf(foutput_x, "%f\n", x[i]);
       //  }

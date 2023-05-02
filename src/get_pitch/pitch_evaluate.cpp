@@ -68,7 +68,7 @@ int main(int argc, const char * argv[])  {
       return 3;
     }
     
-   // cout << "### Compare " << file_f0ref[i] << " and " << ftest << "\n";
+    cout << "### Compare " << file_f0ref[i] << " and " << ftest << "\n";
 
 
     int diff_frames = f0ref.size() - f0test.size();
@@ -101,10 +101,10 @@ int main(int argc, const char * argv[])  {
     
     print_results(f0ref.size(), num_voiced, num_unvoiced, num_voiced_unvoiced, num_unvoiced_voiced, 
 	  num_voiced_voiced, num_gross_errors, fine_error, ftest);
-   // cout << "--------------------------\n\n";
+    cout << "--------------------------\n\n";
   }   
 
-  if (nfiles > 0) {
+  if (nfiles > 1) {
     cout << "\n### Summary\n";
     print_results(nTot, vTot, uTot, vuTot, uvTot, vvTot, grossTot, fineTot/nfiles, "TOTAL");
     cout << "--------------------------\n\n";
@@ -212,5 +212,5 @@ void print_results(int nframes, int num_voiced, int num_unvoiced,
 
   cout << fixed << setprecision(2);
   cout << "===>\t" << filename << ":\t" << 100 * score << " %\n";
-  cout << 100 * score;
+  //cout << 100 * score;
 }
