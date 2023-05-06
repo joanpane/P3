@@ -113,6 +113,31 @@ Ejercicios de ampliación
 
   * Inserte un *pantallazo* en el que se vea el mensaje de ayuda del programa y un ejemplo de utilización
     con los argumentos añadidos.
+    ```
+    $ get_pitch -h
+
+    get_pitch - Pitch Estimator
+
+    Usage:
+        get_pitch [options] <input-wav> <output-txt>
+        get_pitch (-h | --help)
+        get_pitch --version
+
+    Options:
+        -h, --help  Show this screen
+        --version   Show the version of the project
+        -w <window-type>, --window=<window-type>  Define windowing to use [default: RECT]
+        -1 FLOAT, --param1=FLOAT  Define parameter 1 (r[max]/r[0]) for voice detection [default: 0.406]
+        -2 FLOAT, --param2=FLOAT  Define parameter 2 (r[1]/r[0]) [default: 0.5]
+        -3 FLOAT, --param3=FLOAT  Define parameter 3 (pot) [default: -46]
+        -c FLOAT, --centerclipth=FLOAT  Define center clipping threshhold [default: 0.0001]
+
+    Arguments:
+        input-wav   Wave file with the audio signal
+        output-txt  Output file: ASCII file with the result of the estimation:
+                        - One line per frame with the estimated f0
+                        - If considered unvoiced, f0 must be set to f0 = 0
+    ```
 
 - Implemente las técnicas que considere oportunas para optimizar las prestaciones del sistema de estimación
   de pitch.
