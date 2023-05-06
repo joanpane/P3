@@ -120,11 +120,64 @@ Ejercicios de ampliación
   Entre las posibles mejoras, puede escoger una o más de las siguientes:
 
   * Técnicas de preprocesado: filtrado paso bajo, diezmado, *center clipping*, etc.
+    ```c++
+    for(unsigned int k=0; k<x.size(); k++){
+      if(abs(x[k])<ccth){
+        x[k]=0;
+      }
+    }
+    ```
+    > Con este filtro reducimos el ruido en los momentos de silencio, evitando asi posibles falsos positivos a la hora de determinar la sonoridad de una trama. De momento, usaremos un treshold de 0.01.
+
   * Técnicas de postprocesado: filtro de mediana, *dynamic time warping*, etc.
+    ```c++
+    for(unsigned int l = 1; l < f0.size(); l++){
+      if(f0[l-1] != 0 && f0[l]!=0){
+        if(f0[l]>f0[l-1]*1.8){
+          f0[l] = f0[l-1];
+        } else if (f0[l]<f0[l-1]*0.6){
+          f0[l] = f0[l-1];
+        }
+      } 
+    }
+    ```
+    > Este filtro pretende evitar el posible efecto de doblar o reducir a la mitad accidentalmente la frecuencia fundamental encontrada.
+
   * Métodos alternativos a la autocorrelación: procesado cepstral, *average magnitude difference function*
     (AMDF), etc.
   * Optimización **demostrable** de los parámetros que gobiernan el estimador, en concreto, de los que
     gobiernan la decisión sonoro/sordo.
+    ```bash
+    #!/bin/bash
+    DIR_P3=$HOME/PAV/P3
+    DB=$DIR_P3/pitch_db/train
+    CMD="get_pitch "
+    BESTSCORE=0
+    A=0
+    param1=0.406 param2=0.5 param3=-46 ccparam=0
+    #apt install dc
+
+    for param1 in $(seq .40 .003 .42); do 
+    for param2 in $(seq .4 .02 .5); do
+    for param3 in $(seq -47 1 -43); do
+    for ccparam in $(seq 0 0.0001 0.001); do
+        echo -e -n "\rPitchAnalyzer with param1=$param1, param2=$param2, param3=$param3, ccth=$ccparam"
+        for filewav in pitch_db/train/*.wav; do
+            ff0=${filewav/.wav/.f0}
+            #echo "$CMD --param1 $param1 --param2 $param2 --param3 $param3 $filewav $ff0"
+            $CMD -1 $param1 -2 $param2 -3 $param3 -c $ccparam $filewav $ff0 || (echo -e "\nError in $CMD $filewav $ff0" && exit 1) 
+        done
+        A=$(pitch_evaluate_noverb pitch_db/train/*.f0ref)
+        if ! echo "$A $BESTSCORE -p" | dc | grep > /dev/null ^-; then
+            BESTSCORE=$A
+            clear
+            echo -e "New Best score $BESTSCORE with parameters  param1=$param1, param2=$param2, param3=$param3, ccth=$ccparam"
+        fi
+        done done done done
+    exit 0
+    ```
+    > Con este script podemos definir entre que umbrales y con que paso queremos probar nuestro sistema. Hemos tenido que hacer otro programa evaluador que solo nos retorne el porcentaje total.
+
   * Cualquier otra técnica que se le pueda ocurrir o encuentre en la literatura.
 
   Encontrará más información acerca de estas técnicas en las [Transparencias del Curso](https://atenea.upc.edu/pluginfile.php/2908770/mod_resource/content/3/2b_PS%20Techniques.pdf)

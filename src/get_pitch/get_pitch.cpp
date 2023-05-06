@@ -29,9 +29,10 @@ Options:
     -h, --help  Show this screen
     --version   Show the version of the project
     -w <window-type>, --window=<window-type>  Define windowing to use [default: RECT]
-    -p1 FLOAT, --param1=REAL  Define parameter 1  [default: 0.7]
-    -p2 REAL, --param2=REAL  Define parameter 2  [default: 0.7]
-    -p3 REAL , --param3=REAL  Define parameter 3  [default: -40.0]
+    -1 FLOAT, --param1=FLOAT  Define parameter 1 (r[max]/r[0]) for voice detection [default: 0.406]
+    -2 FLOAT, --param2=FLOAT  Define parameter 2 (r[1]/r[0]) [default: 0.5]
+    -3 FLOAT, --param3=FLOAT  Define parameter 3 (pot) [default: -46]
+    -c FLOAT, --centerclipth=FLOAT  Define center clipping threshhold [default: 0.0001]
 
 Arguments:
     input-wav   Wave file with the audio signal
@@ -57,7 +58,7 @@ vector<float> get_data(vector<float> x){
   int iRMax = 0;
   float Rmax = 0;
 
-  for(int i=1; i<r.size(); i++){
+  for(long unsigned int i=1; i<r.size(); i++){
     if(r[i]>Rmax){ 
       Rmax = r[i];
       iRMax = i;
@@ -89,6 +90,7 @@ int main(int argc, const char *argv[]) {
   float param1 = stof(args["--param1"].asString());
   float param2 = stof(args["--param2"].asString());
   float param3 = stof(args["--param3"].asString());
+  float ccth = stof(args["--centerclipth"].asString());
 
   // cout << "param1: " << param1 <<" param2: " << param2 << " param3: " <<param3 << " ";
 
@@ -121,6 +123,12 @@ int main(int argc, const char *argv[]) {
   /// \TODO
   /// Preprocess the input signal in order to ease pitch estimation. For instance,
   /// central-clipping or low pass filtering may be used.
+
+  for(unsigned int k=0; k<x.size(); k++){
+    if(abs(x[k])<ccth){
+      x[k]=0;
+    }
+  }
   
   // Iterate for each frame and save values in f0 vector
   int cont = 0;
@@ -163,9 +171,10 @@ int main(int argc, const char *argv[]) {
     if(f0[l-1] != 0 && f0[l]!=0){
       if(f0[l]>f0[l-1]*1.8){
         f0[l] = f0[l-1];
+      } else if (f0[l]<f0[l-1]*0.6){
+        f0[l] = f0[l-1];
       }
-    }
-    
+    } 
   }
 
   // Write f0 contour into the output file

@@ -91,7 +91,7 @@ namespace upc {
 
     vector<float> r(npitch_max);
     autocorrelation(x, r);
-    int iRMax = 0;
+    int iRMax = 2;
     float Rmax = 0;
 
     // vector<float>::const_iterator iR = r.begin(), iRMax = iR;

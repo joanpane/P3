@@ -24,3 +24,15 @@ pitch_evaluate = executable(
     link_with: lib_pav,
     install: true,
 )
+
+# Programa pitch_evaluate_noverb
+exe = 'pitch_evaluate_noverb'
+src = 'pitch_evaluate_noverb.cpp'
+
+pitch_evaluate_noverb = executable(
+    exe,
+    sources: src,
+    include_directories: inc,
+    link_with: lib_pav,
+    install: true,
+)
