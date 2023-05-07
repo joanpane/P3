@@ -185,7 +185,13 @@ int main(int argc, const char *argv[]) {
   f0_filtrado.push_back(f0[f0.size()-1]); 
   f0 = f0_filtrado;
 
+  
 
+  for(unsigned int l = 0; l < f0.size(); l++){
+    if(f0[l]==F0_max || f0[l]==F0_min){
+      f0[l]=0;
+    }
+  }
 
   // Write f0 contour into the output file
   ofstream os(output_txt);

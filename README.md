@@ -186,6 +186,16 @@ Ejercicios de ampliación
     ```
     > Este filtro de mediana pretende evitar el posible efecto de doblar o reducir a la mitad accidentalmente la frecuencia fundamental encontrada.
 
+    ```
+    for(unsigned int l = 0; l < f0.size(); l++){
+      if(f0[l]==F0_max || f0[l]==F0_min){
+        f0[l]=0;
+      }
+    }
+    ```
+
+    > Este segundo filtro elimina errores provocados por los maximos en los extremos de la autocorrelacion
+
   * Métodos alternativos a la autocorrelación: procesado cepstral, *average magnitude difference function*
     (AMDF), etc.
 
