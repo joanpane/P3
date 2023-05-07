@@ -118,7 +118,10 @@ int main(int argc, const char *argv[]) {
     windowt=PitchAnalyzer::RECT;
   }
 
-  PitchAnalyzer analyzer(n_len, rate, windowt, 50, 500, param1, param2, param3);
+  int F0_min = 50;
+  int F0_max = 500;
+
+  PitchAnalyzer analyzer(n_len, rate, windowt, F0_min, F0_max, param1, param2, param3);
 
   /// \TODO
   /// Preprocess the input signal in order to ease pitch estimation. For instance,
@@ -146,7 +149,8 @@ int main(int argc, const char *argv[]) {
 
   for (iX = x.begin(); iX + n_len < x.end(); iX = iX + n_shift) {
     float f = analyzer(iX, iX + n_len, cont);
-    cont++;
+    if (f) 
+      cont++;
     f0.push_back(f);
 
     //For data:
@@ -167,15 +171,21 @@ int main(int argc, const char *argv[]) {
   //  f0[k]=midF;
   //}
 
-  for(unsigned int l = 1; l < f0.size(); l++){
-    if(f0[l-1] != 0 && f0[l]!=0){
-      if(f0[l]>f0[l-1]*1.8){
-        f0[l] = f0[l-1];
-      } else if (f0[l]<f0[l-1]*0.6){
-        f0[l] = f0[l-1];
+  vector<float> element;     
+  vector<float> f0_filtrado;          
+  f0_filtrado.push_back(f0[0]);       
+  for (unsigned int l=1; l<f0.size()-1; l++){   
+      for(int r=-1; r<2; r++){    
+        element.push_back(f0[l+r]);   
       }
-    } 
-  }
+      sort(element.begin(),element.end());   
+      f0_filtrado.push_back(element[1]);    
+      element.clear();    
+    }
+  f0_filtrado.push_back(f0[f0.size()-1]); 
+  f0 = f0_filtrado;
+
+
 
   // Write f0 contour into the output file
   ofstream os(output_txt);

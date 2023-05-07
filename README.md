@@ -18,13 +18,10 @@ Ejercicios básicos
       void PitchAnalyzer::autocorrelation(const vector<float> &x, vector<float> &r) const {
         for (unsigned int l = 0; l < r.size(); ++l) {
         r[l] = 0;
-
         for(unsigned int n=0; n<x.size(); n++){ // i n=0?
            r[l] += x[n]*x[n+l];
         }
-
        r[l] /= x.size();
-
       }
       ```
       > Aquesta funció calcula l'autocorrelació. Li passem el vector x de senyal i el vector r que és el que plenem amb l'autocorrelació. 
@@ -35,6 +32,8 @@ Ejercicios básicos
 	 autocorrelación de la señal y la posición del primer máximo secundario.
   
       ![Comparación](informe/comparacio.png)
+
+      > Vemos que la autocorrelación presenta su segundo maximo con un lag de 78, correspondiendo con un pitch de 20 kHz/78 = 256'41 Hz. 
 
 	 NOTA: es más que probable que tenga que usar Python, Octave/MATLAB u otro programa semejante para
 	 hacerlo. Se valorará la utilización de la biblioteca matplotlib de Python.
@@ -88,7 +87,7 @@ Ejercicios básicos
 	    Recuerde configurar los paneles de datos para que el desplazamiento de ventana sea el adecuado, que
 		en esta práctica es de 15 ms.
 
-      ![Datos](prueba/prueba.png)
+        ![Datos](informe/prueba/prueba.png)
 
       - Use el estimador de pitch implementado en el programa `wavesurfer` en una señal de prueba y compare
 	    su resultado con el obtenido por la mejor versión de su propio sistema.  Inserte una gráfica
@@ -96,10 +95,25 @@ Ejercicios básicos
      
 		Aunque puede usar el propio Wavesurfer para obtener la representación, se valorará
 	 	el uso de alternativas de mayor calidad (particularmente Python).
+
+        ![Datos](informe/prueba/prueba_est.png)
+
+        > En la anterior grafica podemos ver nuestro estimador contra el pitch de referencia y contra el estimador de wavesurfer. Podemos ver que el nuestro (exceptuando el principio), se ciñe mas a la frecuencia real.
   
   * Optimice los parámetros de su sistema de estimación de pitch e inserte una tabla con las tasas de error
     y el *score* TOTAL proporcionados por `pitch_evaluate` en la evaluación de la base de datos 
 	`pitch_db/train`..
+
+    ```
+    ### Summary
+    Num. frames:    11200 = 7045 unvoiced + 4155 voiced
+    Unvoiced frames as voiced:      215/7045 (3.05 %)
+    Voiced frames as unvoiced:      364/4155 (8.76 %)
+    Gross voiced errors (+20.00 %): 50/3791 (1.32 %)
+    MSE of fine errors:     2.66 %
+    ===>    TOTAL:  91.65 %
+    --------------------------
+    ```
 
 Ejercicios de ampliación
 ------------------------
@@ -156,20 +170,25 @@ Ejercicios de ampliación
 
   * Técnicas de postprocesado: filtro de mediana, *dynamic time warping*, etc.
     ```c++
-    for(unsigned int l = 1; l < f0.size(); l++){
-      if(f0[l-1] != 0 && f0[l]!=0){
-        if(f0[l]>f0[l-1]*1.8){
-          f0[l] = f0[l-1];
-        } else if (f0[l]<f0[l-1]*0.6){
-          f0[l] = f0[l-1];
+    vector<float> element;     
+    vector<float> f0_filtrado;          
+    f0_filtrado.push_back(f0[0]);       
+    for (unsigned int l=1; l<f0.size()-1; l++){   
+        for(int r=-1; r<2; r++){    
+          element.push_back(f0[l+r]);   
         }
-      } 
-    }
+        sort(element.begin(),element.end());   
+        f0_filtrado.push_back(element[1]);    
+        element.clear();    
+      }
+    f0_filtrado.push_back(f0[f0.size()-1]); 
+    f0 = f0_filtrado;
     ```
-    > Este filtro pretende evitar el posible efecto de doblar o reducir a la mitad accidentalmente la frecuencia fundamental encontrada.
+    > Este filtro de mediana pretende evitar el posible efecto de doblar o reducir a la mitad accidentalmente la frecuencia fundamental encontrada.
 
   * Métodos alternativos a la autocorrelación: procesado cepstral, *average magnitude difference function*
     (AMDF), etc.
+
   * Optimización **demostrable** de los parámetros que gobiernan el estimador, en concreto, de los que
     gobiernan la decisión sonoro/sordo.
     ```bash

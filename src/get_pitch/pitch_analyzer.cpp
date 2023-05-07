@@ -132,18 +132,20 @@ namespace upc {
     if (unvoiced(pot, r[1]/r[0], r[lag]/r[0]))
       return 0;
     else{
-      //if(cont==1){
-      //  FILE *foutput_x = fopen("informe/resultats_x.txt", "w+");
-      //  FILE *foutput_r = fopen("informe/resultats_r.txt", "w+");
-      //  for(unsigned int i=0; i<x.size(); i++){
-      //    fprintf(foutput_x, "%f\n", x[i]);
-      //  }
-      //  for(unsigned int j=0; j<r.size(); j++){
-      //    fprintf(foutput_r, "%f\n", r[j]);
-      //  }
-      //  fclose(foutput_x);
-      //  fclose(foutput_r);
-      //}
+      /*
+      if(cont==3){
+        FILE *foutput_x = fopen("informe/resultats_x.txt", "w+");
+        FILE *foutput_r = fopen("informe/resultats_r.txt", "w+");
+        for(unsigned int i=0; i<x.size(); i++){
+          fprintf(foutput_x, "%f\n", x[i]);
+        }
+        for(unsigned int j=0; j<r.size(); j++){
+          fprintf(foutput_r, "%f\n", r[j]);
+        }
+        fclose(foutput_x);
+        fclose(foutput_r);
+      }
+      */
       return (float) samplingFreq/(float) lag;
     }
       
